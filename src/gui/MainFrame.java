@@ -13,13 +13,31 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import main.OrganizeType;
 import main.Utilities;
+import javax.swing.JRadioButton;
 
-public class MainFrame {
+public class MainFrame 
+{
 
 	private JFrame frame;
-	private JTextField sourcePath;
+	
+	private JLabel title;
+	
+	private JButton startAction;
+	private JButton sourcePathBrowse;
+	private JButton targetPathBrowse;
+	
+	private JRadioButton yearRadioButton;
+	private JRadioButton monthRadioButton;
+	private JRadioButton dayRadioButton;
+	
+	private JLabel sourcePathLabel;
+	private JLabel targetPathLabel;
+	
+	private JTextField sourcePath; 
 	private JTextField targetPath;
+	
 	
 	private int srcWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 	private int srcHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
@@ -44,12 +62,12 @@ public class MainFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel sourcePathLabel = new JLabel("Source Path:");
+		sourcePathLabel = new JLabel("Source Path:");
 		sourcePathLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
 		sourcePathLabel.setBounds(26, 145, 91, 27);
 		frame.getContentPane().add(sourcePathLabel);
 		
-		JLabel targetPathLabel = new JLabel("Target Path:");
+		targetPathLabel = new JLabel("Target Path:");
 		targetPathLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
 		targetPathLabel.setBounds(26, 190, 91, 27);
 		frame.getContentPane().add(targetPathLabel);
@@ -64,7 +82,7 @@ public class MainFrame {
 		frame.getContentPane().add(targetPath);
 		targetPath.setColumns(10);
 		
-		JButton targetPathBrowse = new JButton("Browse");
+		targetPathBrowse = new JButton("Browse");
 		targetPathBrowse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
@@ -81,7 +99,7 @@ public class MainFrame {
 		targetPathBrowse.setBounds(459, 191, 89, 27);
 		frame.getContentPane().add(targetPathBrowse);
 		
-		JButton sourcePathBrowse = new JButton("Browse");
+		sourcePathBrowse = new JButton("Browse");
 		sourcePathBrowse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
@@ -98,7 +116,7 @@ public class MainFrame {
 		sourcePathBrowse.setBounds(459, 146, 89, 27);
 		frame.getContentPane().add(sourcePathBrowse);
 		
-		JButton startAction = new JButton("Start");
+		startAction = new JButton("Start");
 		startAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
@@ -108,7 +126,7 @@ public class MainFrame {
 					{
 						try 
 						{
-							if(Utilities.organize(sourcePath.getText(), targetPath.getText())) 
+							if(Utilities.organize(sourcePath.getText(), targetPath.getText(), getOrgaType())) 
 							{
 								System.out.println("Valid Paths");	
 							}
@@ -137,16 +155,76 @@ public class MainFrame {
 				
 			}
 		});
-		startAction.setBounds(225, 240, 114, 41);
+		startAction.setBounds(227, 273, 114, 41);
 		frame.getContentPane().add(startAction);
 		
-		JLabel title = new JLabel("Image Organizer");
+		title = new JLabel("Image Organizer");
 		title.setFont(new Font("Tahoma", Font.BOLD, 24));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setBounds(178, 32, 209, 61);
 		frame.getContentPane().add(title);
+		
+		yearRadioButton = new JRadioButton("Year");
+		monthRadioButton = new JRadioButton("Month");
+		dayRadioButton = new JRadioButton("Day");
+
+		yearRadioButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(yearRadioButton.isSelected()) {
+					monthRadioButton.setSelected(false);
+					dayRadioButton.setSelected(false);
+				}
+			}
+		});
+		yearRadioButton.setBounds(168, 234, 69, 23);
+		frame.getContentPane().add(yearRadioButton);
+		
+		monthRadioButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(monthRadioButton.isSelected()) {
+					yearRadioButton.setSelected(false);
+					dayRadioButton.setSelected(false);
+				}
+			}
+		});
+		monthRadioButton.setBounds(261, 234, 69, 23);
+		frame.getContentPane().add(monthRadioButton);
+		
+		
+		dayRadioButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(dayRadioButton.isSelected()) {
+					yearRadioButton.setSelected(false);
+					monthRadioButton.setSelected(false);
+				}
+			}
+		});
+		dayRadioButton.setBounds(367, 234, 69, 23);
+		frame.getContentPane().add(dayRadioButton);
 		frame.setVisible(true);
 	
+		dayRadioButton.setSelected(true);
+		
 	}
 	
+	private OrganizeType getOrgaType() 
+	{
+		if(yearRadioButton.isSelected()) 
+		{
+			return OrganizeType.YEAR;
+		}
+		else if(monthRadioButton.isSelected()) 
+		{
+			return OrganizeType.MONTH;
+		}
+		else if(dayRadioButton.isSelected()) 
+		{
+			return OrganizeType.DAY;
+		}
+		else 
+		{	
+			System.out.println("Invalid orginize type!");
+			return OrganizeType.YEAR;
+		}
+	}
 }

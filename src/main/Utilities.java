@@ -52,14 +52,14 @@ public class Utilities {
 		return false;
 	}
 	
-	public static boolean organize(String sourcePath, String targetPath) throws IOException 
+	public static boolean organize(String sourcePath, String targetPath, OrganizeType type) throws IOException 
 	{
-		User user = new User(sourcePath);
+		User user = new User(sourcePath, type);
 		FolderComponent newFolderComponent = user.getUserFolder();
 		
 		String userPath = targetPath + "\\"+ newFolderComponent.getName();
 		File newTarget = new File(userPath);
-		
+
 		if(!newTarget.mkdir()) 
 		{
 			System.out.println("Error create folder");
@@ -69,7 +69,6 @@ public class Utilities {
 		String destination = null;
 		for(FolderComponent component : newFolderComponent.getFolderComponent()) 
 		{
-			System.out.println(component.getName());
 			if(component.isFolder()) {
 				destination = userPath + "\\" + component.getName();
 				File newFolder = new File(destination);

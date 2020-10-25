@@ -14,7 +14,7 @@ public class User {
 
 	private FolderComponent userFolder;
 	
-	public User(String sourcePath) throws IOException 
+	public User(String sourcePath, OrganizeType type) throws IOException 
 	{		
 		String pattern = "yyyyMMdd";
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
@@ -36,24 +36,26 @@ public class User {
 			BasicFileAttributes attrs = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
 			FileTime time = attrs.creationTime();
 		    String formatted = simpleDateFormat.format( new Date( time.toMillis() ) );
-		    FolderComponent image = new Image(file.getName(),formatted);
+		    FolderComponent image = new Image(file.getName(),getOrganizeTypeFormat(formatted, type));
 		    
 		    if(check.equals("")) 
 		    {
-		    	newFolder = new Folder(formatted);
-		    	check = formatted;
+		    	System.out.println("First");
+		    	newFolder = new Folder(getOrganizeTypeFormat(formatted, type));
+		    	check = getOrganizeTypeFormat(formatted, type);
 		    	newFolder.add(image);
 		    }
 		    else 
 		    {
-		    	if(Integer.parseInt(check) != Integer.parseInt(formatted)) 
+		    	if(Integer.parseInt(check) != Integer.parseInt(getOrganizeTypeFormat(formatted, type))) 
 		    	{
 		    		this.userFolder.add(newFolder);
-		    		newFolder = new Folder(formatted);
-		    		check = formatted;
+		    		newFolder = new Folder(getOrganizeTypeFormat(formatted, type));
+		    		check = getOrganizeTypeFormat(formatted, type);
 		    	}
 		    	if(listOfFiles[listOfFiles.length -1].equals(file)) 
 		    	{
+			    	System.out.println("SON");
 		    		newFolder.add(image);
 		    		this.userFolder.add(newFolder);
 		    		break;
@@ -63,8 +65,30 @@ public class User {
 		}
 	}
 	
-	public FolderComponent getUserFolder() {
+	public FolderComponent getUserFolder() 
+	{
 		return this.userFolder;
+	}
+	
+	private String getOrganizeTypeFormat(String date, OrganizeType type) 
+	{
+		if(type.equals(OrganizeType.YEAR)) 
+		{
+			return date.substring(0,4);
+		}
+		else if(type.equals(OrganizeType.MONTH)) 
+		{
+			return date.substring(4,6);
+		}
+		else if(type.equals(OrganizeType.DAY)) 
+		{
+			return date.substring(0,8);
+		}
+		else 
+		{
+			System.out.println("Invalid type!");
+			return date.substring(0,3);
+		}
 	}
 	
 	public void display() 
@@ -76,7 +100,6 @@ public class User {
 			}
 		}
 	}
-	
 	
     private static File[] mergeSort(File[] list) throws IOException 
     {
