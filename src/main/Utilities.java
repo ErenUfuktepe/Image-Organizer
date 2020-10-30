@@ -8,8 +8,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class Utilities {
 
@@ -24,7 +22,7 @@ public class Utilities {
 		
 		Path path = new File(newPath).toPath();
 		
-		if(Files.isDirectory(path)) 
+		if(Files.isDirectory(path) && !(newPath.isBlank() || newPath.isEmpty())) 
 		{
 			return true;
 		} 
@@ -62,7 +60,6 @@ public class Utilities {
 
 		if(!newTarget.mkdir()) 
 		{
-			System.out.println("Error create folder");
 			return false;
 		}
 		
@@ -74,7 +71,6 @@ public class Utilities {
 				File newFolder = new File(destination);
 				if(!newFolder.mkdir()) 
 				{
-					System.out.println("Error create folder");
 					return false;
 				}
 			}
@@ -86,7 +82,8 @@ public class Utilities {
 	}
 	
 	
-	private static void copyFile(File source, File dest) throws IOException {
+	private static void copyFile(File source, File dest) throws IOException 
+	{
 	    InputStream inputStream = null;
 	    OutputStream outputStream = null;
 	    try {

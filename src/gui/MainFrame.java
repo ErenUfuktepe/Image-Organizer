@@ -6,10 +6,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -46,13 +48,13 @@ public class MainFrame
 	 * Create the application.
 	 */
 	public MainFrame() {
-		initialize();
+
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() 
+	public void initialize() 
 	{
 		int frameWidth = 581;
 		int frameHeight = 387;
@@ -128,29 +130,30 @@ public class MainFrame
 						{
 							if(Utilities.organize(sourcePath.getText(), targetPath.getText(), getOrgaType())) 
 							{
-								System.out.println("Valid Paths");	
+								popupBox("All images organized!","Success","success");
 							}
-							else {
-								System.out.println("Error");
-							}		
+							else 
+							{
+								popupBox("Existing folder in target path!","Folder Exception","error");
+							}	
 						}
 						catch(Exception exception)
 						{
-							//throws exception();
+							popupBox(exception.getMessage(),"I/O Exception","error");
 						}
 					}
 					else 
 					{
-						System.out.println("No image");
+						popupBox("No image found in source path!","No Image","error");
 					}
 				}
 				else if(!Utilities.isValidFolderPath(sourcePath.getText())) 
 				{
-					System.out.println("Invalid Source Path");
+					popupBox("Please pick valid source path!","Invalid Source Path","error");
 				}
 				else
 				{
-					System.out.println("Invalid Target Path");
+					popupBox("Please pick valid target path!","Invalid Target Path","error");
 				}
 				
 			}
@@ -217,14 +220,22 @@ public class MainFrame
 		{
 			return OrganizeType.MONTH;
 		}
-		else if(dayRadioButton.isSelected()) 
+		else
 		{
 			return OrganizeType.DAY;
 		}
-		else 
-		{	
-			System.out.println("Invalid orginize type!");
-			return OrganizeType.YEAR;
-		}
 	}
+
+	private void popupBox(String message, String title, String type)
+    {
+		if (type.equals("error")) 
+		{
+			JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
+		}
+		else 
+		{
+			JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);	
+		}
+        
+    }
 }
