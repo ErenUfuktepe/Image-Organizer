@@ -1,7 +1,10 @@
 package main;
 
+import java.time.Month;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Folder extends FolderComponent {
 
@@ -10,7 +13,25 @@ public class Folder extends FolderComponent {
 	
 	public Folder(String newFolderName) 
 	{
-		this.folderName = newFolderName;
+		//Year
+		if(newFolderName.length() == 4) 
+		{
+			this.folderName = newFolderName;
+		}
+		//Month
+		else if(newFolderName.length() == 6) 
+		{
+			this.folderName = Month.of(Integer.parseInt(newFolderName.substring(4,6)))
+					.getDisplayName(TextStyle.FULL_STANDALONE ,Locale.ENGLISH) 
+					+ "-" + newFolderName.substring(4,6);
+		}
+		//Day
+		else {
+			this.folderName = newFolderName.substring(6,8) 
+					+ "-" + Month.of(Integer.parseInt(newFolderName.substring(4,6)))
+						.getDisplayName(TextStyle.FULL_STANDALONE ,Locale.ENGLISH) 
+					+ "-" + newFolderName.substring(0,4);
+		}		
 	}
 
 	@Override
@@ -42,5 +63,5 @@ public class Folder extends FolderComponent {
 	public boolean isFolder() {
 		return true;
 	}
-	
+
 }

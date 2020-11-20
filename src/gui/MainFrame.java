@@ -6,18 +6,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import main.OrganizeType;
 import main.Utilities;
-import javax.swing.JRadioButton;
 
 public class MainFrame 
 {
@@ -44,16 +43,11 @@ public class MainFrame
 	private int srcWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 	private int srcHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
-	/**
-	 * Create the application.
-	 */
+
 	public MainFrame() {
 
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	public void initialize() 
 	{
 		int frameWidth = 581;
@@ -128,12 +122,17 @@ public class MainFrame
 					{
 						try 
 						{
+							LoadingDialog loading = new LoadingDialog();
+							loading.initialize();
 							if(Utilities.organize(sourcePath.getText(), targetPath.getText(), getOrgaType())) 
 							{
+								loading.kill();
 								popupBox("All images organized!","Success","success");
+								System.exit(0);
 							}
 							else 
 							{
+								loading.kill();
 								popupBox("Existing folder in target path!","Folder Exception","error");
 							}	
 						}

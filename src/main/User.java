@@ -40,7 +40,6 @@ public class User {
 		    
 		    if(check.equals("")) 
 		    {
-		    	System.out.println("First");
 		    	newFolder = new Folder(getOrganizeTypeFormat(formatted, type));
 		    	check = getOrganizeTypeFormat(formatted, type);
 		    	newFolder.add(image);
@@ -55,7 +54,6 @@ public class User {
 		    	}
 		    	if(listOfFiles[listOfFiles.length -1].equals(file)) 
 		    	{
-			    	System.out.println("SON");
 		    		newFolder.add(image);
 		    		this.userFolder.add(newFolder);
 		    		break;
