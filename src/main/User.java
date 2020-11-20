@@ -35,6 +35,7 @@ public class User {
 			
 			BasicFileAttributes attrs = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
 			FileTime time = attrs.creationTime();
+			//FileTime time = attrs.lastModifiedTime();
 		    String formatted = simpleDateFormat.format( new Date( time.toMillis() ) );
 		    FolderComponent image = new Image(file.getName(),getOrganizeTypeFormat(formatted, type));
 		    
@@ -76,7 +77,7 @@ public class User {
 		}
 		else if(type.equals(OrganizeType.MONTH)) 
 		{
-			return date.substring(4,6);
+			return date.substring(0,6);
 		}
 		else if(type.equals(OrganizeType.DAY)) 
 		{

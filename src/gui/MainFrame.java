@@ -118,21 +118,18 @@ public class MainFrame
 			{
 				if(Utilities.isValidFolderPath(sourcePath.getText()) && Utilities.isValidFolderPath(targetPath.getText()))
 				{	
+
 					if(Utilities.hasImage(sourcePath.getText())) 
 					{
 						try 
 						{
-							LoadingDialog loading = new LoadingDialog();
-							loading.initialize();
 							if(Utilities.organize(sourcePath.getText(), targetPath.getText(), getOrgaType())) 
 							{
-								loading.kill();
 								popupBox("All images organized!","Success","success");
 								System.exit(0);
 							}
 							else 
 							{
-								loading.kill();
 								popupBox("Existing folder in target path!","Folder Exception","error");
 							}	
 						}

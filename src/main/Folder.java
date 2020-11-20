@@ -23,7 +23,7 @@ public class Folder extends FolderComponent {
 		{
 			this.folderName = Month.of(Integer.parseInt(newFolderName.substring(4,6)))
 					.getDisplayName(TextStyle.FULL_STANDALONE ,Locale.ENGLISH) 
-					+ "-" + newFolderName.substring(4,6);
+					+ "-" + newFolderName.substring(0,4);
 		}
 		//Day
 		else {
@@ -31,7 +31,7 @@ public class Folder extends FolderComponent {
 					+ "-" + Month.of(Integer.parseInt(newFolderName.substring(4,6)))
 						.getDisplayName(TextStyle.FULL_STANDALONE ,Locale.ENGLISH) 
 					+ "-" + newFolderName.substring(0,4);
-		}		
+		}
 	}
 
 	@Override
