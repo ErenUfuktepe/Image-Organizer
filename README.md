@@ -4,7 +4,7 @@ I create this project for myself to organize my photos with ease. This program g
 
 ## Technologies
 
-In this project, I used Java programming language and for the front-end I used Swing. In the project design, I used the <b>Composite Desing Pattern</b>. The Composite pattern is a partitioning design pattern and describes a group of objects that are treated the same way as a single instance of the same type of object. The intent of a composite is to “compose” objects into tree structures to represent part-whole hierarchies. It allows you to have a tree structure and ask each node in the tree structure to perform a task.
+In this project, I used Java programming language and for the front-end I used <b>Swing</b>. In the project design, I used the <b>Composite Desing Pattern</b>. The Composite pattern is a partitioning design pattern and describes a group of objects that are treated the same way as a single instance of the same type of object. The intent of a composite is to “compose” objects into tree structures to represent part-whole hierarchies. It allows you to have a tree structure and ask each node in the tree structure to perform a task.
 
 ## Example Execution
 
