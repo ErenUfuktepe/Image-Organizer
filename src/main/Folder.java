@@ -1,5 +1,6 @@
 package main;
 
+import java.io.File;
 import java.time.Month;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
@@ -10,9 +11,11 @@ public class Folder extends FolderComponent {
 
 	private List<FolderComponent> folderComponent = new ArrayList<FolderComponent>();
 	private String folderName;
+	private File folder;
 	
-	public Folder(String newFolderName) 
+	public Folder(String newFolderName, File folder) 
 	{
+		this.folder = folder;
 		//Year
 		if(newFolderName.length() == 4) 
 		{
@@ -64,4 +67,8 @@ public class Folder extends FolderComponent {
 		return true;
 	}
 
+	@Override
+	public File getClassInfo() {
+		return this.folder;
+	}
 }

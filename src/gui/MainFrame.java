@@ -119,7 +119,7 @@ public class MainFrame
 				if(Utilities.isValidFolderPath(sourcePath.getText()) && Utilities.isValidFolderPath(targetPath.getText()))
 				{	
 
-					if(Utilities.hasImage(sourcePath.getText())) 
+					if(Utilities.hasValidFileType(sourcePath.getText())) 
 					{
 						try 
 						{
@@ -151,7 +151,6 @@ public class MainFrame
 				{
 					popupBox("Please pick valid target path!","Invalid Target Path","error");
 				}
-				
 			}
 		});
 		startAction.setBounds(227, 273, 114, 41);

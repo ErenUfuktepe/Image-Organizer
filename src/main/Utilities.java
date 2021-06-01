@@ -8,14 +8,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
 
 public class Utilities {
 
-	
-	public Utilities() 
-	{
-		
-	}
+	public static List<String> fileTypes = Arrays.asList("jpeg", "jpg", "png","mp4","mov","wmv","flv","avi","heic");
+
+	public Utilities() {}
 	
 	public static boolean isValidFolderPath(String newPath) 
 	{
@@ -29,27 +29,27 @@ public class Utilities {
 		return false;
 	}
 	
-	public static boolean hasImage(String newPath) 
+	public static boolean hasValidFileType(String path) 
 	{
-		File folder = new File(newPath);
+		File folder = new File(path);
 		File[] listOfFiles = folder.listFiles();
 		for(File file : listOfFiles) {
 			String fileName = file.toString().toLowerCase();
-	        if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) 
-	        {
-	        	if(fileName.substring(fileName.lastIndexOf(".")+1).equals("jpeg") || fileName.substring(fileName.lastIndexOf(".")+1).equals("jpg") 
-	        			|| fileName.substring(fileName.lastIndexOf(".")+1).equals("png") || fileName.substring(fileName.lastIndexOf(".")+1).equals("mp4")
-	        			|| fileName.substring(fileName.lastIndexOf(".")+1).equals("mov") || fileName.substring(fileName.lastIndexOf(".")+1).equals("wmv")
-	        			|| fileName.substring(fileName.lastIndexOf(".")+1).equals("flv") || fileName.substring(fileName.lastIndexOf(".")+1).equals("avi")) 
-	        	{
-	        		return true;
-	        	}
-	        }
-	        
+			if(!file.isDirectory()) 
+			{
+				if(Utilities.fileTypes.contains(fileName.substring(fileName.lastIndexOf(".")+1))) 
+				{
+					return true;
+				}
+			}
+			else 
+			{
+				return hasValidFileType(file.getAbsolutePath());
+			}
 		}
 		return false;
 	}
-	
+
 	public static boolean organize(String sourcePath, String targetPath, OrganizeType type) throws IOException 
 	{
 		User user = new User(sourcePath, type);
@@ -75,7 +75,7 @@ public class Utilities {
 				}
 			}
 			for(FolderComponent image : component.getFolderComponent()) {
-				copyFile(new File(sourcePath + "\\" + image.getName()), new File(destination + "\\" + image.getName()));	
+				 copyFile(image.getClassInfo(), new File(destination + "\\" + image.getName()));	
 			}
 		}
 		return true;

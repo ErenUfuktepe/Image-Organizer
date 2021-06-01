@@ -1,5 +1,6 @@
 package main;
 
+import java.io.File;
 import java.util.List;
 
 public abstract class FolderComponent {
@@ -21,6 +22,10 @@ public abstract class FolderComponent {
 	}
 	
 	public List<FolderComponent> getFolderComponent(){
+		throw new UnsupportedOperationException();
+	}
+	
+	public File getClassInfo() {
 		throw new UnsupportedOperationException();
 	}
 	

@@ -13,55 +13,79 @@ import java.time.format.DateTimeFormatter;
 public class User {
 
 	private FolderComponent userFolder;
+	private OrganizeType type;
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+	private String folderCheck = "19000101"; //Default Value
+	private FolderComponent newFolder = null;
 	
 	public User(String sourcePath, OrganizeType type) throws IOException 
 	{		
-		String pattern = "yyyyMMdd";
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		this.type = type;
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
+		LocalDateTime now = LocalDateTime.now();
+		this.userFolder = new Folder(dtf.format(now).toString(), null);
 		
+		folderStructure(sourcePath);
+	}
+	
+	
+	private void folderStructure(String sourcePath) throws IOException 
+	{	
 		File folder = new File(sourcePath);
 		File[] listOfFiles = mergeSort(folder.listFiles());
 		
-		String check = "";
-		
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
-		LocalDateTime now = LocalDateTime.now();
-		userFolder = new Folder(dtf.format(now).toString());
-		
-		FolderComponent newFolder = null;
-		
 		for(File file : listOfFiles) 
 		{
-			
-			BasicFileAttributes attrs = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
-			FileTime time = attrs.creationTime();
-			//FileTime time = attrs.lastModifiedTime();
-		    String formatted = simpleDateFormat.format( new Date( time.toMillis() ) );
-		    FolderComponent image = new Image(file.getName(),getOrganizeTypeFormat(formatted, type));
-		    
-		    if(check.equals("")) 
-		    {
-		    	newFolder = new Folder(getOrganizeTypeFormat(formatted, type));
-		    	check = getOrganizeTypeFormat(formatted, type);
-		    	newFolder.add(image);
-		    }
-		    else 
-		    {
-		    	if(Integer.parseInt(check) != Integer.parseInt(getOrganizeTypeFormat(formatted, type))) 
-		    	{
-		    		this.userFolder.add(newFolder);
-		    		newFolder = new Folder(getOrganizeTypeFormat(formatted, type));
-		    		check = getOrganizeTypeFormat(formatted, type);
-		    	}
-		    	if(listOfFiles[listOfFiles.length -1].equals(file)) 
-		    	{
-		    		newFolder.add(image);
-		    		this.userFolder.add(newFolder);
-		    		break;
-		    	}
-		    	newFolder.add(image);
-		    }
+			String fileName = file.toString().toLowerCase();
+			if(!file.isDirectory()) 
+			{
+				if(Utilities.fileTypes.contains(fileName.substring(fileName.lastIndexOf(".") + 1))) 
+				{
+					BasicFileAttributes attrs = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+					FileTime time = attrs.creationTime();
+					//FileTime time = attrs.lastModifiedTime();
+				    String formatted = this.dateFormat.format( new Date( time.toMillis() ) );
+				    FolderComponent image = new Image(file.getName(),getOrganizeTypeFormat(formatted, this.type), file);
+				
+				    // The image 
+			    	if(Integer.parseInt(this.folderCheck) != Integer.parseInt(getOrganizeTypeFormat(formatted, this.type))) 
+			    	{
+			    		if(this.newFolder != null) {
+			    			this.userFolder.add(this.newFolder);	
+			    		}
+			    		this.newFolder = new Folder(getOrganizeTypeFormat(formatted, this.type), file);
+			    		this.folderCheck = getOrganizeTypeFormat(formatted, this.type);
+			    	}
+			    	
+			    	this.newFolder.add(image);
+			    	
+			    	if(listOfFiles[listOfFiles.length -1].equals(file)) 
+			    	{
+			    		if (!isExistingComponent(newFolder.getName()))
+	    				{
+			    			this.userFolder.add(newFolder);
+	    				}
+			    	}
+				}
+			}
+			else 
+			{
+				folderStructure(file.getAbsolutePath());
+			}
 		}
+	}
+	
+	
+	private boolean isExistingComponent(String folderName) 
+	{
+		for(FolderComponent component : this.userFolder.getFolderComponent()) 
+		{
+			if(component.getName().equals(folderName)) 
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public FolderComponent getUserFolder() 
