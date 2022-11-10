@@ -111,9 +111,18 @@ public class Frame extends JFrame {
 		return this;
 	}
 	
-	public String getSelectedRadioButton() {
+	public String getSelectedRadioButtonForOrganizeOption() {
 		for(RadioButton button : this.radioButtons) {
-			if(button.isSelected()) {
+			if(button.isSelected() && button.getKey().equals("Organize Option")) {
+				return button.getText();
+			}
+		}
+		return null;
+	}
+	
+	public String getSelectedRadioButtonForActionOption() {
+		for(RadioButton button : this.radioButtons) {
+			if(button.isSelected() && button.getKey().equals("Action Option")) {
 				return button.getText();
 			}
 		}
@@ -146,7 +155,8 @@ public class Frame extends JFrame {
 	
 	private void removeCheckForOthers(RadioButton radioButton) {
 		this.radioButtons.stream()
-						 .filter(button -> !button.equals(radioButton))
+						 .filter(button -> (!button.equals(radioButton) && 
+								 			 button.getKey().equals(radioButton.getKey())))
 						 .forEach(button -> button.setSelected(false));
 	}
 

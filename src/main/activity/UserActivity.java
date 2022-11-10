@@ -28,6 +28,8 @@ public class UserActivity {
 
 	private List<FileAction> fileActionList = new ArrayList<>();
 
+	private FileActionType fileActionType;
+	
 	public UserActivity() {
 		setUpWorkers(THREADS);
 	}
@@ -51,6 +53,15 @@ public class UserActivity {
 		return this;
 	}
 	
+	public FileActionType getFileActionType() {
+		return fileActionType;
+	}
+
+	public UserActivity setFileActionType(FileActionType fileActionType) {
+		this.fileActionType = fileActionType;
+		return this;
+	}
+	
 	private List<FileAction> setUpWorkers(int numberOfWorker){
 		for(int index = 0; index < numberOfWorker; index++) {
 			FileAction fileAction = new FileAction(null, null, index +1);
@@ -63,6 +74,7 @@ public class UserActivity {
 		this.user = new User();
 		this.user.setComponent(FileUtilities.toFolderComponentDTO(frameDTO.getSourcePath()));
 		this.user.setTargetPath(frameDTO.getTargetPath());
+		this.fileActionType = frameDTO.getFileActionType();
 		
 		for(FolderComponentDTO folderComponentDTO : this.user.getComponent().getFolderComponents()) {
 			if(folderComponentDTO.isFolder()) {
@@ -73,7 +85,7 @@ public class UserActivity {
 				FileAction worker = getFileActionWithReadyStatus();
 				worker.setFile((FileDTO) folderComponentDTO);
 				worker.setTargetPath(absoluteTargetPath);
-				worker.setType(FileActionType.COPY);
+				worker.setType(this.fileActionType);
 				worker.setStatus(FileActionStatus.EXECUTING);
 				POOL.execute(worker);
 			}
@@ -91,7 +103,7 @@ public class UserActivity {
 				FileAction worker = getFileActionWithReadyStatus();
 				worker.setFile((FileDTO) component);
 				worker.setTargetPath(absoluteTargetPath);
-				worker.setType(FileActionType.COPY);
+				worker.setType(this.fileActionType);
 				worker.setStatus(FileActionStatus.EXECUTING);
 				POOL.execute(worker);
 			}

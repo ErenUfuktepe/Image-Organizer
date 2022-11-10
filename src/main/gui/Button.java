@@ -52,9 +52,10 @@ public class Button extends JButton {
 						.filter(textField -> textField.getTextFieldLabel().getText() == "Target Path")
 						.findAny().get();
 				FrameDTO frameDto = new FrameDTO()
-						.setOrganizeBy(frame.getSelectedRadioButton())
+						.setOrganizeBy(frame.getSelectedRadioButtonForOrganizeOption())
 						.setSourcePath(sourcePath.getText())
-						.setTargetPath(targetPath.getText());
+						.setTargetPath(targetPath.getText())
+						.setFileActionType(frame.getSelectedRadioButtonForActionOption());
 				
 				if(frameDto.isValid()) {
 					UserActivity activity = new UserActivity();

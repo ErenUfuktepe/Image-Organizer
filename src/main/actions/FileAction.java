@@ -6,6 +6,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import main.dtos.FileDTO;
 import main.types.FileActionStatus;
@@ -39,10 +43,18 @@ public class FileAction implements Runnable{
 				System.out.println("Thread " + this.id + " Coping: " + this.file.getAbsolutePath());
 				copyFile(new File(this.file.getAbsolutePath()), new File(this.targetPath));
 			}
+			else {
+				System.out.println("Thread " + this.id + " Moving: " + this.file.getAbsolutePath());
+				Files.move(Paths.get(this.file.getAbsolutePath()), 
+						Paths.get(this.targetPath), 
+						StandardCopyOption.ATOMIC_MOVE);
+			}
 			
 			this.status = FileActionStatus.READY;
-		}
-		catch (IOException e) {
+		} catch (FileAlreadyExistsException e) {
+			System.out.println("File Already Exists : Thread " + this.id + " Moving: " + this.file.getAbsolutePath());
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		} 
 	}
@@ -97,8 +109,7 @@ public class FileAction implements Runnable{
 		return this;
 	}
 
-	private void copyFile(File source, File dest) throws IOException 
-	{
+	private void copyFile(File source, File dest) throws IOException {
 	    InputStream inputStream = null;
 	    OutputStream outputStream = null;
 	    try {

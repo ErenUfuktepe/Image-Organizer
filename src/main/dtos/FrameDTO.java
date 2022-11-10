@@ -1,6 +1,7 @@
 package main.dtos;
 
 import main.types.ExceptionHandler;
+import main.types.FileActionType;
 import main.types.OrganizeOption;
 import main.utilities.FileUtilities;
 
@@ -11,6 +12,8 @@ public class FrameDTO {
 	private String targetPath;
 	
 	private OrganizeOption organizeBy;
+	
+	private FileActionType fileActionType;
 	
 	public String getSourcePath() {
 		return this.sourcePath;
@@ -40,10 +43,23 @@ public class FrameDTO {
 		}
 		else if(organizeBy == "Month") {
 			this.organizeBy = OrganizeOption.MONTH;
-
 		}
 		else {
 			this.organizeBy = OrganizeOption.DAY;
+		}
+		return this;
+	}
+	
+	public FileActionType getFileActionType() {
+		return fileActionType;
+	}
+
+	public FrameDTO setFileActionType(String fileActionType) {
+		if(fileActionType == "Copy") {
+			this.fileActionType = FileActionType.COPY;
+		}
+		else {
+			this.fileActionType = FileActionType.MOVE;
 		}
 		return this;
 	}
